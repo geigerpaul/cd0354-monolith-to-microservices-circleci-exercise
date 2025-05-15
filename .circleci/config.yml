@@ -16,6 +16,11 @@ jobs:
           command: |
             echo "Inside the Build and push Docker image step"
             docker --version # print the version for logging
+            # Ensure Dockerfile exists before building
+            if [ ! -f Dockerfile ]; then
+              echo "ERROR: Dockerfile not found in $(pwd)"
+              exit 1
+            fi
             docker build -t sudkul/sample-express-app .        
             docker tag sudkul/sample-express-app sudkul/sample-express-app:1.0.0
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
